@@ -80,7 +80,7 @@ class DashPage extends StatelessWidget {
                                     fontSize: 18,
                                   )),
                               RaisedButton(
-                                onPressed: () {},
+                                onPressed: () { },
                                 child: Text('출금'),
                                 color: Colors.red,
                               ),

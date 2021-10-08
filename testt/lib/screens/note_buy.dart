@@ -387,10 +387,11 @@ FinishDiaLog(context, String title, String total,String date) {
 
   // final String buyDatetime = "buyDatetime";
 
-  final controller = Get.put(BuilderController());
+
 
   var f = NumberFormat('###,###,###,###');
-  DatabaseBuy().getNoteMapList2().then((value) => value.forEach((element) {
+  var test = [];
+  DatabaseBuy().getMonth().then((value) => value.forEach((element) {
     print(element.values);
   }));
   List<Note> elements = [
