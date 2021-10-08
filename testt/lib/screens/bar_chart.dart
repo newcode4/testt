@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:testt/common/Constants.dart';
 import 'package:testt/db_helper/db_helper.dart';
-import 'package:testt/modal_class/notes.dart';
+
 
 class Chart extends StatefulWidget {
   BarChart createState() => BarChart();
