@@ -12,6 +12,7 @@ class DatabaseBuy {
 
   String noteTable = 'buy_table';
   String noteTable2 = 'sell_table';
+  String noteTable3 = 'money_table';
   String colId = 'id';
   String colTitle = 'title';
   String colPrice = 'price';
@@ -20,6 +21,7 @@ class DatabaseBuy {
   String colDescription = 'description';
   String colPriority = 'priority';
   String colColor = 'color';
+  String colMoney= 'money';
   String colDate = 'date';
   String colMonthTotal = 'monthtotal';
 
@@ -59,8 +61,12 @@ class DatabaseBuy {
     String sellTable = 'CREATE TABLE $noteTable2($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT,'
         '$colPrice TEXT, $colVolume TEXT, $colTotal Text, $colDescription TEXT, $colPriority INTEGER, $colMonthTotal INTEGER,$colDate TEXT);';
 
+    String moneyTable = 'create table $noteTable3($colId integer primary key autoincrement, $colTitle Text,'
+        '$colMoney Test);';
+
     await db.execute(buyTable);
     await db.execute(sellTable);
+    await db.execute(moneyTable);
 
 
     newVersion= 1;
@@ -93,7 +99,13 @@ class DatabaseBuy {
 
   Future<List<Map<String, dynamic>>> getMonth() async {
     Database db = await this.database;
-    var re= await db.rawQuery('Select  sum($colTotal), $colDate  FROM $noteTable2 GROUP BY strftime("%Y-%m-%d")  ');
+    var re= await db.rawQuery('Select  sum($colTotal), $colDate  FROM $noteTable2 GROUP BY strftime("%m")  ');
+    return re;
+  }
+
+  Future<List<Map<String, dynamic>>> getTotal() async {
+    Database db = await this.database;
+    var re= await db.rawQuery('Select  sum($colTotal) as total  FROM $noteTable2  ');
     return re;
   }
 

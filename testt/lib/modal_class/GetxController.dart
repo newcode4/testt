@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:testt/common/Constants.dart';
 
 
 
@@ -14,13 +15,30 @@ class CounterController extends GetxController{
   }
 }
 
-class AxisCount extends GetxController{
-  int count3;
+class Money extends GetxController{
+  int count3 = box.read('money');
+
+  String total;
 
 
-  void count(int a){
-    count3 = a == 2 ? 2 : 4;
-    print(count3);
+
+
+  void CountPlus(int a){
+    if(count3 ==  null) count3=0;
+    count3 = count3 + a;
+
+    update();
+  }
+  void CountMinus(int a){
+    if(count3 ==  null) count3=0;
+    count3 = count3 - a;
+
+    update();
+  }
+
+  void RateReturn(int a, int b){
+    total = (a/b*100).toStringAsFixed(1);
+
     update();
   }
 }
