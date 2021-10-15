@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  bezier_chart:
+    dependency: "direct main"
+    description:
+      name: bezier_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.17+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -36,20 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  charts_common:
-    dependency: transitive
-    description:
-      name: charts_common
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.0"
-  charts_flutter:
-    dependency: "direct main"
-    description:
-      name: charts_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.0"
   clock:
     dependency: transitive
     description:
@@ -152,14 +145,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
+    version: "0.16.0"
   matcher:
     dependency: transitive
     description:
@@ -291,20 +277,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  syncfusion_flutter_charts:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_charts
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "19.3.44+1"
-  syncfusion_flutter_core:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "19.3.44"
   synchronized:
     dependency: transitive
     description:

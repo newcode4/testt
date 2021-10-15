@@ -19,28 +19,31 @@ class _DashPageState extends State<DashPage> {
   var f = NumberFormat('###,###,###,###');
 
   int money = 0;
-  String profit = '';
+  String profit = '0';
 
 
   @override
   void initState() {
     money = box.read('money');
+    profit = box.read('profit');
     asyncMethod();
-
     super.initState();
   }
 
   void asyncMethod() async {
     await DatabaseBuy().getTotal().then((value) =>
         value.forEach((element) {
-          profit = element.values.toString().substring(1, element.values
+          var profit2 = element.values.toString().substring(1, element.values
               .toString()
               .length - 1);
+          box.write('profit',profit2);
         }));
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(Money());
+    controller.RateReturn(int.parse(profit), money);
     var f = NumberFormat('###,###,###,###');
     return Scaffold(
       body: Container(
@@ -96,7 +99,7 @@ class _DashPageState extends State<DashPage> {
                       children: [
                       RaisedButton(
                       onPressed: () {
-                DepositDialog(context);
+                DepositDialog(context,profit);
                 },
                   child: Text('입금'),
                   color: Colors.blue,
@@ -105,22 +108,26 @@ class _DashPageState extends State<DashPage> {
                 Row(
                   children: [
                     GetBuilder<Money>(
-                        init: Money(),
                         builder: (_) {
-                          _.RateReturn(int.parse(profit), money);
                           return
-                            Text('수익률 : ${_.total} %',
-                              style: TextStyle(
-                                   color: Colors.white,
-                                fontSize: 18
-                                ),
-                               );
+                            InkWell(
+                              child: Text('수익률 : ${_.total} %',
+                                style: TextStyle(
+                                     color: Colors.white,
+                                  fontSize: 18
+                                  ),
+                                 ),
+                              onTap: (){
+                                controller.RateReturn(int.parse(profit), money);
+                                print(profit);
+                              },
+                            );
                           }),
                   ],
                 ),
             RaisedButton(
               onPressed: () {
-                DepositDialog2(context);
+                DepositDialog2(context,profit,money);
               },
               child: Text('출금'),
               color: Colors.red,
@@ -134,7 +141,6 @@ class _DashPageState extends State<DashPage> {
           children: [
 
             GetBuilder<Money>(
-                init: Money(),
                 builder: (_) {
                   box.write('money', _.count3);
                   return Text(
@@ -165,7 +171,6 @@ class _DashPageState extends State<DashPage> {
           children: [
 
             GetBuilder<Money>(
-                init: Money(),
                 builder: (_) {
                   box.write('money', _.count3);
                   return Text(
@@ -381,7 +386,7 @@ class _DashPageState extends State<DashPage> {
   }
 }
 
-DepositDialog(context) {
+DepositDialog(context,profit) {
   TextEditingController price = TextEditingController();
   final controller = Get.put(Money());
 
@@ -466,7 +471,7 @@ DepositDialog(context) {
                                 int money = int.parse(price.text);
 
                                 controller.CountPlus(money);
-
+                                controller.RateReturn(int.parse(profit), controller.count3);
                                 Navigator.pop(context);
                               })
                         ]),
@@ -477,7 +482,7 @@ DepositDialog(context) {
   );
 }
 
-DepositDialog2(context) {
+DepositDialog2(context,profit,money2) {
   TextEditingController price = TextEditingController();
   final controller = Get.put(Money());
 
@@ -561,6 +566,8 @@ DepositDialog2(context) {
                               onPressed: () {
                                 int money = int.parse(price.text);
                                 controller.CountMinus(money);
+                                controller.RateReturn(int.parse(profit),  controller.count3);
+
                                 Navigator.pop(context);
                               })
                         ]),

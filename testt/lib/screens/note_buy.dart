@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -162,9 +163,9 @@ class NoteBuyState extends State<NoteBuy> {
                       children: [
                         RaisedButton(
                           onPressed: () {
-                            print(this.noteList[index].title);
-                            print(this.noteList[index].volume);
-                            print(this.noteList[index].total);
+                            // print(this.noteList[index].title);
+                            // print(this.noteList[index].volume);
+                            // print(this.noteList[index].total);
 
                             LogDiaLog(
                               context,
@@ -360,30 +361,45 @@ class NoteBuyState extends State<NoteBuy> {
   }
 }
 
-FinishDiaLog(context, String title, String total, String date) {
+Widget FinishDiaLog(context, String title, String total, String date) {
+
+
   DatabaseBuy databaseHelper = DatabaseBuy();
   Future<Database> dbFuture = databaseHelper.initializeDatabase();
   dbFuture.then((database) {
     Future<List<Note>> noteListFuture = databaseHelper.getNoteList2();
     noteListFuture.then((noteList) {
-      // print(noteList[0].total);
-      var f = NumberFormat('###,###,###,###');
-      var test = [];
+      // noteList.where((element) => element.title == title);
+      int total = 0;
 
-      //   DatabaseBuy().getNoteList2().then((value) =>
-      //       value.forEach((element) {
-      //         List<Note> elements = [
-      //
-      //           Note(title, date, '', '', total, '')
-      //
-      //         ];
-      // print(element.title);
+      var f = NumberFormat('###,###,###,###');
+      var filterList = noteList.where((element) => element.title == title).toList();
+
+      for(int i =0; i<filterList.length; i++){
+        total += int.parse(filterList[i].total);
+      }
+
       return showDialog(
           context: context,
           builder: (context) {
             return Scaffold(
                 appBar: AppBar(
-                  title: Text(title),
+                  title: GestureDetector(child: Text(title),
+                  onTap: (){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:  Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('합계: ${f.format(total)}원',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold
+                            ),),
+                        ],
+                      ),
+                      duration: Duration(seconds: 2),
+                    ));
+                  },),
                   centerTitle: true,
                 ),
                 body: ListView(
@@ -392,7 +408,7 @@ FinishDiaLog(context, String title, String total, String date) {
                     children: <Widget>[
                       GroupedListView<Note, String>(
                         shrinkWrap: true,
-                        elements: noteList,
+                        elements: filterList,
                         // 리스트에 사용할 데이터 리스트
                         groupBy: (element) => element.date.split(' ')[0],
                         // 데이터 리스트 중 그룹을 지정할 항목
@@ -417,7 +433,8 @@ FinishDiaLog(context, String title, String total, String date) {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        itemBuilder: (c, element) {
+
+                        indexedItemBuilder: (build,element,index) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: Card(
@@ -430,7 +447,7 @@ FinishDiaLog(context, String title, String total, String date) {
                                     padding: const EdgeInsets.all(8),
                                     child: ListTile(
                                       title: Text(
-                                        title,
+                                        filterList[index].title,
                                         style: TextStyle(
                                           // color: chage
                                           // ? Colors.redAccent
@@ -440,20 +457,38 @@ FinishDiaLog(context, String title, String total, String date) {
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
-                                      // subtitle: Text(
-                                      //   "\n거래차익 : ${noteList[index].total}원",
-                                      //   style: TextStyle(
-                                      //     fontSize: 12.5,
-                                      //     fontFamily: 'RobotoMono',
-                                      //     fontWeight: FontWeight.w700,
-                                      //   ),
-                                      // ),
+                                      subtitle: Text(
+                                        "\n거래차익 : ${f.format(int.parse(filterList[index].total))}원",
+                                        style: TextStyle(
+                                          fontSize: 12.5,
+                                          fontFamily: 'RobotoMono',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
                                     ))),
                           );
                         },
                       ),
-                    ]));
+                    ]),
+
+            // bottomSheet: Padding(
+            //   padding: const EdgeInsets.all(14.0),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text('합계: ${f.format(total)}원',
+            //       style: TextStyle(
+            //         fontSize: 20,
+            //         fontWeight: FontWeight.bold
+            //       ),),
+            //     ],
+            //   ),
+            // ),
+            );
           });
     });
   });
+}
+
+void showtotalsnack() {
 }
