@@ -16,28 +16,28 @@ class CounterController extends GetxController{
 }
 
 class Money extends GetxController{
-  int count3 = box.read('money');
 
-  String total;
+  int count3 = 0;
 
-
+  String total='0';
 
 
   void CountPlus(int a){
-    if(count3 ==  null) count3=0;
+   count3 = box.read('money');
     count3 = count3 + a;
 
     update();
   }
   void CountMinus(int a){
-    if(count3 ==  null) count3=0;
+    count3 = box.read('money');
     count3 = count3 - a;
 
     update();
   }
 
   void RateReturn(int a, int b){
-    total = (a/b*100).toStringAsFixed(1);
+    if(a==null || b==null) total = '0';
+    else total = (a/b*100).toStringAsFixed(1);
 
     update();
   }

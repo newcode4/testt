@@ -18,31 +18,35 @@ class DashPage extends StatefulWidget {
 class _DashPageState extends State<DashPage> {
   var f = NumberFormat('###,###,###,###');
 
-  int money = 0;
-  String profit = '0';
+  int money;
+  String profit;
 
 
   @override
-  void initState() {
-    money = box.read('money');
-    profit = box.read('profit');
+   initState()  {
     asyncMethod();
+    money =  box.read('money');
+    profit = box.read('profit');
+
     super.initState();
   }
 
   void asyncMethod() async {
     await DatabaseBuy().getTotal().then((value) =>
-        value.forEach((element) {
-          var profit2 = element.values.toString().substring(1, element.values
+        value.forEach((element) async {
+          String profit2 = await element.values.toString().substring(1, element.values
               .toString()
               .length - 1);
+
           box.write('profit',profit2);
+          print(profit2);
         }));
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(Money());
+    final controller =  Get.put(Money());
+    if(profit==null) profit ='0';
     controller.RateReturn(int.parse(profit), money);
     var f = NumberFormat('###,###,###,###');
     return Scaffold(

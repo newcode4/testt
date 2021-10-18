@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:testt/common/Constants.dart';
 import 'package:testt/modal_class/notes.dart';
 
 class DatabaseBuy {
@@ -21,7 +20,7 @@ class DatabaseBuy {
   String colDescription = 'description';
   String colPriority = 'priority';
   String colColor = 'color';
-  String colMoney= 'money';
+  String colMoney = 'money';
   String colDate = 'date';
   String colMonthTotal = 'monthtotal';
 
@@ -54,24 +53,24 @@ class DatabaseBuy {
   }
 
   void _createDb(Database db, int newVersion) async {
-
-    String buyTable = 'CREATE TABLE $noteTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT,'
+    String buyTable =
+        'CREATE TABLE $noteTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT,'
         '$colPrice TEXT, $colVolume TEXT, $colTotal Text, $colDescription TEXT, $colPriority INTEGER, $colMonthTotal INTEGER,$colDate TEXT);';
 
-    String sellTable = 'CREATE TABLE $noteTable2($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT,'
+    String sellTable =
+        'CREATE TABLE $noteTable2($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT,'
         '$colPrice TEXT, $colVolume TEXT, $colTotal Text, $colDescription TEXT, $colPriority INTEGER, $colMonthTotal INTEGER,$colDate TEXT);';
 
-    String moneyTable = 'create table $noteTable3($colId integer primary key autoincrement, $colTitle Text,'
+    String moneyTable =
+        'create table $noteTable3($colId integer primary key autoincrement, $colTitle Text,'
         '$colMoney Test);';
 
     await db.execute(buyTable);
     await db.execute(sellTable);
     await db.execute(moneyTable);
 
-
-    newVersion= 1;
+    newVersion = 1;
   }
-
 
   // Fetch Operation: Get all note objects from database
   Future<List<Map<String, dynamic>>> getNoteMapList() async {
@@ -86,26 +85,23 @@ class DatabaseBuy {
     Database db = await this.database;
 
 //		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
-    var result = await db
-        .query(noteTable2, orderBy: '$colId DESC');
+    var result = await db.query(noteTable2, orderBy: '$colId DESC');
     return result;
   }
 
 
 
-
-
-
-
   Future<List<Map<String, dynamic>>> getMonth() async {
     Database db = await this.database;
-    var re= await db.rawQuery('Select  sum($colTotal), $colDate  FROM $noteTable2 GROUP BY strftime("%m")  ');
+    var re = await db.rawQuery(
+        'Select  sum($colTotal), $colDate  FROM $noteTable2 GROUP BY strftime("%m")  ');
     return re;
   }
 
   Future<List<Map<String, dynamic>>> getTotal() async {
     Database db = await this.database;
-    var re= await db.rawQuery('Select  sum($colTotal) as total  FROM $noteTable2  ');
+    var re = await db
+        .rawQuery('Select  sum($colTotal) as total  FROM $noteTable2  ');
     return re;
   }
 
@@ -148,7 +144,7 @@ class DatabaseBuy {
   Future<int> deleteNote2(int id) async {
     var db = await this.database;
     int result =
-    await db.rawDelete('DELETE FROM $noteTable2 WHERE $colId = $id');
+        await db.rawDelete('DELETE FROM $noteTable2 WHERE $colId = $id');
     return result;
   }
 
@@ -164,7 +160,7 @@ class DatabaseBuy {
   Future<int> getCount2() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x =
-    await db.rawQuery('SELECT COUNT (*) from $noteTable2');
+        await db.rawQuery('SELECT COUNT (*) from $noteTable2');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -172,12 +168,28 @@ class DatabaseBuy {
   Future<List<Note>> getAll() async {
     var database = await this.database;
     List<Map> rawList = await database.rawQuery('SELECT * FROM $noteTable2');
-    return List.generate(rawList.length, (index) =>
-        Note(rawList[index]['title'],rawList[index]['date'],'','',rawList[index]['total'],
-             ''));
+    return List.generate(
+        rawList.length,
+        (index) => Note(rawList[index]['title'], rawList[index]['date'], '', '',
+            rawList[index]['total'], ''));
   }
 
+  Future<List<Note2>> dogs() async {
+    // 데이터베이스 reference를 얻습니다.
+    final Database db = await database;
 
+    // 모든 Dog를 얻기 위해 테이블에 질의합니다.
+    List<Map<String, dynamic>> x =  await db.rawQuery('SELECT COUNT (*) from $noteTable2');
+
+    // List<Map<String, dynamic>를 List<Dog>으로 변환합니다.
+    return List.generate(x.length, (i) {
+      return Note2(
+          title: x[i]['title'],
+          total: x[i]['total'],
+          date: x[i]['date'],
+      );
+    });
+  }
 
   // Get the 'Map List' [ List<Map> ] and convert it to 'Note List' [ List<Note> ]
   Future<List<Note>> getNoteList() async {
@@ -207,18 +219,18 @@ class DatabaseBuy {
 
     return noteList;
   }
-  //
-  // Future<List<Note>> getMonth() async {
-  //   var noteMapList = await getMonth(); // Get 'Map List' from database
-  //   int count =
-  //       noteMapList.length; // Count the number of map entries in db table
-  //
-  //   List<Note> noteList = [];
-  //   // For loop to create a 'Note List' from a 'Map List'
-  //   for (int i = 0; i < count; i++) {
-  //     noteList.add(Note.fromMapObject(noteMapList[i]));
-  //   }
-  //
-  //   return noteList;
-  // }
+//
+// Future<List<Note>> getMonth() async {
+//   var noteMapList = await getMonth(); // Get 'Map List' from database
+//   int count =
+//       noteMapList.length; // Count the number of map entries in db table
+//
+//   List<Note> noteList = [];
+//   // For loop to create a 'Note List' from a 'Map List'
+//   for (int i = 0; i < count; i++) {
+//     noteList.add(Note.fromMapObject(noteMapList[i]));
+//   }
+//
+//   return noteList;
+// }
 }

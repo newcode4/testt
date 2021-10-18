@@ -1,5 +1,7 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
+import 'package:testt/db_helper/db_helper.dart';
 
 class BarChart extends StatelessWidget {
   @override
@@ -30,46 +32,40 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Bezier Chart Sample"),
+          title: Text("라인 그래프",),
+          centerTitle: true,
         ),
         body: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.black54,
-                Colors.black87,
-                Colors.black87,
-              ],
-            ),
+          gradient: LinearGradient(
+          colors: [
+          Colors.black54,
+          Colors.black87,
+          Colors.black87,
+          Colors.black,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                "Bezier Chart",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
               _buildChart(
                   BezierChartScale.YEARLY,
                   context,
                   LinearGradient(
                     colors: [
-                      Colors.purple[300],
-                      Colors.purple[400],
-                      Colors.purple[400],
-                      Colors.purple[500],
-                      Colors.purple,
+                      Colors.blueAccent,
+                      Colors.blueAccent[400],
+                      Colors.lightBlue[400],
+                      Colors.lightBlue[500],
+                      Colors.blue,
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                  ))
+                  ),
+              )
             ],
           ),
         )
@@ -78,161 +74,112 @@ class MyHomePage extends StatelessWidget {
 }
 _buildChart(BezierChartScale scale, BuildContext context,
     LinearGradient gradient) {
-  final fromDate = DateTime(2018, 11, 22);
+  final fromDate = DateTime(2020, 05, 22);
   final toDate = DateTime.now();
-
   final date1 = DateTime.now().subtract(Duration(days: 2));
   final date2 = DateTime.now().subtract(Duration(days: 3));
-
-  final date3 = DateTime.now().subtract(Duration(days: 2));
-  final date4 = DateTime.now().subtract(Duration(days: 2));
-
-  final date5 = DateTime.now().subtract(Duration(days: 2));
-  final date6 = DateTime.now().subtract(Duration(days: 652));
 
   return Center(
     child: Card(
       elevation: 10,
       margin: EdgeInsets.all(15.0),
       child: Container(
-        color: Colors.red,
-        height: MediaQuery.of(context).size.height / 1.8,
-        width: MediaQuery.of(context).size.width,
-        child: BezierChart(
-          bezierChartScale: scale,
-          fromDate: fromDate,
-          toDate: toDate,
-          selectedDate: toDate,
-          series: [
-            BezierLine(
-              label: "Duty",
-              onMissingValue: (dateTime) {
-                if (dateTime.year.isEven) {
-                  return 20.0;
-                }
-                return 5.0;
-              },
-              data: <DataPoint<DateTime>>[
-                DataPoint<DateTime>(value: 10, xAxis: date1),
-                DataPoint<DateTime>(value: 50, xAxis: date2),
-                DataPoint<DateTime>(value: 100, xAxis: date3),
-                DataPoint<DateTime>(value: 100, xAxis: date4),
-                DataPoint<DateTime>(value: 40, xAxis: date5),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-                DataPoint<DateTime>(value: 47, xAxis: date6),
-              ],
-            ),
-
-          ],
-          config: BezierChartConfig(
-            startYAxisFromNonZeroValue: true,
-            verticalIndicatorStrokeWidth: 3.0,
-            verticalIndicatorColor: Colors.black26,
-            showVerticalIndicator: true,
-            verticalIndicatorFixedPosition: false,
-            backgroundGradient: gradient,
-            footerHeight: 35.0,
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-
-
-
-//SAMPLE CUSTOM VALUES
-Widget sample1(BuildContext context) {
-  return Container(
-    decoration: BoxDecoration(
+      decoration: BoxDecoration(
       gradient: LinearGradient(
-        colors: [
-          Colors.black54,
-          Colors.black87,
-          Colors.black87,
-          Colors.black,
-        ],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      ),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text(
-          "Bezier Chart - Numbers",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        Center(
-          child: Card(
-            elevation: 12,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: BezierChart(
-                bezierChartScale: BezierChartScale.CUSTOM,
-                selectedValue: 30,
-                xAxisCustomValues: const [0, 5, 10, 15, 20, 25, 30, 35],
-                footerValueBuilder: (double value) {
-                  return "${formatAsIntOrDouble(value)}\ndays";
-                },
-                series: const [
-                  BezierLine(
-                    label: "m",
-                    data: const [
-                      DataPoint<double>(value: 10, xAxis: 0),
-                      DataPoint<double>(value: 130, xAxis: 5),
-                      DataPoint<double>(value: 50, xAxis: 10),
-                      DataPoint<double>(value: 150, xAxis: 15),
-                      DataPoint<double>(value: 75, xAxis: 20),
-                      DataPoint<double>(value: 0, xAxis: 25),
-                      DataPoint<double>(value: 5, xAxis: 30),
-                      DataPoint<double>(value: 45, xAxis: 35),
-                      DataPoint<double>(value: 45, xAxis: 35),
-                      DataPoint<double>(value: 45, xAxis: 35),
-                      DataPoint<double>(value: 45, xAxis: 35),
-                      DataPoint<double>(value: 45, xAxis: 35),
-                    ],
-                  ),
+                colors: [
+                  Colors.black54,
+                  Colors.black87,
+                  Colors.black87,
+                  Colors.black,
                 ],
-                config: BezierChartConfig(
-                  startYAxisFromNonZeroValue: false,
-                  bubbleIndicatorColor: Colors.white.withOpacity(0.9),
-                  footerHeight: 40,
-                  verticalIndicatorStrokeWidth: 3.0,
-                  verticalIndicatorColor: Colors.black26,
-                  showVerticalIndicator: true,
-                  verticalIndicatorFixedPosition: false,
-                  displayYAxis: true,
-                  stepsYAxis: 10,
-                  backgroundGradient: LinearGradient(
-                    colors: [
-                      Colors.red[300],
-                      Colors.red[400],
-                      Colors.red[400],
-                      Colors.red[500],
-                      Colors.red,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  snap: true,
-                ),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-          ),
-        ),
-      ],
-    ),
-  );
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "수익률",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Center(
+                  child: Card(
+                    elevation: 12,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: BezierChart(
+                        fromDate: fromDate,
+                        bezierChartScale: BezierChartScale.WEEKLY,
+                        toDate: toDate,
+                        onIndicatorVisible: (val) {
+                          print("Indicator Visible :$val");
+                        },
+                        onDateTimeSelected: (datetime) {
+                          print("selected datetime: $datetime");
+                        },
+                        onScaleChanged: (scale) {
+                          print("Scale: $scale");
+                        },
+                        selectedDate: toDate,
+                        //this is optional
+                        footerDateTimeBuilder: (DateTime value, BezierChartScale scaleType) {
+                          final newFormat = intl.DateFormat('yy/MM/dd');
+                          return newFormat.format(value);
+                        },
+                        series: [
+
+                          BezierLine(
+                            label: "Flight",
+                            lineColor: Colors.white,
+                            onMissingValue: (dateTime) {
+                              if (dateTime.day.isEven) {
+                                return 10.0;
+                              }
+                              return 5.0;
+                            },
+                            data: <DataPoint<DateTime>>[
+                              DataPoint<DateTime>(value: 20, xAxis: date1),
+                              DataPoint<DateTime>(value: 30, xAxis: date2),
+                            ],
+                          ),
+                        ],
+                        config: BezierChartConfig(
+                          startYAxisFromNonZeroValue: false,
+                          displayDataPointWhenNoValue: false,
+                          bubbleIndicatorColor: Colors.white.withOpacity(0.9),
+                          footerHeight: 40,
+                          physics: ClampingScrollPhysics(),
+                          verticalIndicatorStrokeWidth: 3.0,
+                          verticalIndicatorColor: Colors.black26,
+                          showVerticalIndicator: true,
+                          verticalIndicatorFixedPosition: false,
+                          displayYAxis: true,
+                          stepsYAxis: 10,
+                          backgroundGradient: LinearGradient(
+                            colors: [
+                              Colors.blueAccent,
+                              Colors.blueAccent[400],
+                              Colors.lightBlue[400],
+                              Colors.lightBlue[500],
+                              Colors.blue,
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          snap: true,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )));
 }
+

@@ -480,7 +480,7 @@ LogDiaLog(context,int id, String title, String Volume, int datatotal) {
                           CupertinoButton(
                               child: Text('매도'),
                               onPressed: () {
-                                if(double.parse(Volume) == controller.count) {
+                                if(int.parse(Volume) == controller.count) {
                                   DatabaseBuy databaseHelper = DatabaseBuy();
                                   databaseHelper.deleteNote(id);
                                 }

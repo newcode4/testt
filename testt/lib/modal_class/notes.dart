@@ -88,3 +88,21 @@ class Note {
     this._date = map['date'];
   }
 }
+
+
+class Note2 {
+  final String title;
+  final String total;
+  final String date;
+
+  Note2({this.title, this.total, this.date});
+
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'total': total,
+      'date': date,
+    };
+  }
+}

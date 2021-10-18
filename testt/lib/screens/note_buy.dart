@@ -364,7 +364,10 @@ class NoteBuyState extends State<NoteBuy> {
 Widget FinishDiaLog(context, String title, String total, String date) {
 
 
+
   DatabaseBuy databaseHelper = DatabaseBuy();
+
+  print( DatabaseBuy().dogs());
   Future<Database> dbFuture = databaseHelper.initializeDatabase();
   dbFuture.then((database) {
     Future<List<Note>> noteListFuture = databaseHelper.getNoteList2();
@@ -490,5 +493,4 @@ Widget FinishDiaLog(context, String title, String total, String date) {
   });
 }
 
-void showtotalsnack() {
-}
+
