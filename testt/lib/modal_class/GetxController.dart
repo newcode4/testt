@@ -17,19 +17,20 @@ class CounterController extends GetxController{
 
 class Money extends GetxController{
 
-  int count3 = 0;
+  int count3 = box.read('money');
 
   String total='0';
 
 
   void CountPlus(int a){
-   count3 = box.read('money');
+    if(count3==null) count3=0;
+
     count3 = count3 + a;
 
     update();
   }
   void CountMinus(int a){
-    count3 = box.read('money');
+    if(count3==null) count3=0;
     count3 = count3 - a;
 
     update();
@@ -99,6 +100,4 @@ class BuilderController extends GetxController {
     update();
   }
 }
-
-
 

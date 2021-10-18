@@ -148,7 +148,7 @@ class _DashPageState extends State<DashPage> {
                 builder: (_) {
                   box.write('money', _.count3);
                   return Text(
-                    '투자자금 : ${f.format(_.count3)}원',
+                    '투자자금 : ${f.format(_.count3==null? 0: _.count3)}원',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

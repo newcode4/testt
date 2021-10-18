@@ -367,14 +367,14 @@ Widget FinishDiaLog(context, String title, String total, String date) {
 
   DatabaseBuy databaseHelper = DatabaseBuy();
 
-  print( DatabaseBuy().dogs());
+
   Future<Database> dbFuture = databaseHelper.initializeDatabase();
   dbFuture.then((database) {
     Future<List<Note>> noteListFuture = databaseHelper.getNoteList2();
     noteListFuture.then((noteList) {
       // noteList.where((element) => element.title == title);
       int total = 0;
-
+      print(3);
       var f = NumberFormat('###,###,###,###');
       var filterList = noteList.where((element) => element.title == title).toList();
 
