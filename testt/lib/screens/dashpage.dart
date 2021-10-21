@@ -176,6 +176,8 @@ class _DashPageState extends State<DashPage> {
 
             GetBuilder<Money>(
                 builder: (_) {
+                  int money_total = _.count3 + int.parse(profit);
+                  total.write('total',money_total);
                   box.write('money', _.count3);
                   return Text(
                     '합계 : ${f.format(_.count3 + int.parse(profit))}원',

@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
-  bezier_chart:
-    dependency: "direct main"
-    description:
-      name: bezier_chart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.17+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -145,7 +138,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.0"
+    version: "0.17.0"
   matcher:
     dependency: transitive
     description:
@@ -277,6 +270,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.3.46"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "19.3.46"
   synchronized:
     dependency: transitive
     description:

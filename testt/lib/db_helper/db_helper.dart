@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -48,7 +49,7 @@ class DatabaseBuy {
 
     // Open/create the database at a given path
     var notesDatabase =
-        await openDatabase(path, version: 1, onCreate: _createDb);
+    await openDatabase(path, version: 1, onCreate: _createDb);
     return notesDatabase;
   }
 
@@ -88,7 +89,6 @@ class DatabaseBuy {
     var result = await db.query(noteTable2, orderBy: '$colId DESC');
     return result;
   }
-
 
 
   Future<List<Map<String, dynamic>>> getMonth() async {
@@ -137,14 +137,14 @@ class DatabaseBuy {
   Future<int> deleteNote(int id) async {
     var db = await this.database;
     int result =
-        await db.rawDelete('DELETE FROM $noteTable WHERE $colId = $id');
+    await db.rawDelete('DELETE FROM $noteTable WHERE $colId = $id');
     return result;
   }
 
   Future<int> deleteNote2(int id) async {
     var db = await this.database;
     int result =
-        await db.rawDelete('DELETE FROM $noteTable2 WHERE $colId = $id');
+    await db.rawDelete('DELETE FROM $noteTable2 WHERE $colId = $id');
     return result;
   }
 
@@ -152,7 +152,7 @@ class DatabaseBuy {
   Future<int> getCount() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from $noteTable');
+    await db.rawQuery('SELECT COUNT (*) from $noteTable');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -160,7 +160,7 @@ class DatabaseBuy {
   Future<int> getCount2() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from $noteTable2');
+    await db.rawQuery('SELECT COUNT (*) from $noteTable2');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -170,23 +170,34 @@ class DatabaseBuy {
     List<Map> rawList = await database.rawQuery('SELECT * FROM $noteTable2');
     return List.generate(
         rawList.length,
-        (index) => Note(rawList[index]['title'], rawList[index]['date'], '', '',
-            rawList[index]['total'], ''));
+            (index) =>
+            Note(rawList[index]['title'], rawList[index]['date'], '', '',
+                rawList[index]['total'], ''));
   }
+
+  // Future<Map<DateTime, List<String>>> getStatus() async {
+  //   var database = await this.database;
+  //   List<Map> rawList = await database.rawQuery('SELECT * FROM $noteTable2');
+  //   return Map.fromIterable(rawList,
+  //       key: (value) => DateTime.fromMillisecondsSinceEpoch(value['date']),
+  //       value: (value) => List<String>.from(jsonDecode(value['total'])));
+  // }
+
 
   Future<List<Note2>> dogs() async {
     // 데이터베이스 reference를 얻습니다.
     final Database db = await database;
 
     // 모든 Dog를 얻기 위해 테이블에 질의합니다.
-    List<Map<String, dynamic>> x =  await db.rawQuery('SELECT COUNT (*) from $noteTable2');
+    List<Map<String, dynamic>> x = await db.rawQuery(
+        'SELECT COUNT (*) from $noteTable2');
 
     // List<Map<String, dynamic>를 List<Dog>으로 변환합니다.
     return List.generate(x.length, (i) {
       return Note2(
-          title: x[i]['title'],
-          total: x[i]['total'],
-          date: x[i]['date'],
+        title: x[i]['title'],
+        total: x[i]['total'],
+        date: x[i]['date'],
       );
     });
   }
@@ -200,7 +211,7 @@ class DatabaseBuy {
     List<Note> noteList = [];
     // For loop to create a 'Note List' from a 'Map List'
     for (int i = 0; i < count; i++) {
-      noteList.add(Note.fromMapObject(noteMapList[i]));
+      noteList.add(Note.fromMap(noteMapList[i]));
     }
 
     return noteList;
@@ -214,23 +225,10 @@ class DatabaseBuy {
     List<Note> noteList = [];
     // For loop to create a 'Note List' from a 'Map List'
     for (int i = 0; i < count; i++) {
-      noteList.add(Note.fromMapObject(noteMapList[i]));
+      noteList.add(Note.fromMap(noteMapList[i]));
     }
 
     return noteList;
   }
-//
-// Future<List<Note>> getMonth() async {
-//   var noteMapList = await getMonth(); // Get 'Map List' from database
-//   int count =
-//       noteMapList.length; // Count the number of map entries in db table
-//
-//   List<Note> noteList = [];
-//   // For loop to create a 'Note List' from a 'Map List'
-//   for (int i = 0; i < count; i++) {
-//     noteList.add(Note.fromMapObject(noteMapList[i]));
-//   }
-//
-//   return noteList;
-// }
+
 }

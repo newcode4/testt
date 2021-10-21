@@ -1,185 +1,91 @@
-import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
+import 'package:sqflite/sqflite.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testt/common/Constants.dart';
 import 'package:testt/db_helper/db_helper.dart';
+import 'package:testt/modal_class/notes.dart';
 
-class BarChart extends StatelessWidget {
+
+
+
+class LineChart extends StatefulWidget {
+  // ignore: prefer_const_constructors_in_immutables
+  LineChart({Key key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
-  }
+  _LineChartState createState() => _LineChartState();
 }
 
-class MyHomePage extends StatelessWidget {
-  _onTap(BuildContext context, Widget widget) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          appBar: AppBar(),
-          body: widget,
-        ),
-      ),
-    );
+
+
+class _LineChartState extends State<LineChart> {
+
+
+      @override
+    void initState()  {
+        super.initState();
+        asyncMethod();
+
   }
+
+      void asyncMethod()  async{
+         DatabaseBuy databaseHelper = DatabaseBuy();
+
+        Future<Database> dbFuture = databaseHelper.initializeDatabase();
+         await dbFuture.then((database) {
+          Future<List<Note>> noteListFuture = databaseHelper.getNoteList2();
+          noteListFuture.then((noteList) {
+            var filterList = noteList;
+            for (int i = filterList.length-1; i >= 0; i--) {
+              test.add(noteList[i]);
+
+            }
+
+            return money.write('note',test);
+          });});
+
+      }
+
+  List<Note> data = money.read('note');
+      List<Note> test = [];
+
+
+
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
         appBar: AppBar(
-          title: Text("라인 그래프",),
-          centerTitle: true,
+          title: const Text('라인 그래프'),
         ),
-        body: Container(
-          decoration: BoxDecoration(
-          gradient: LinearGradient(
-          colors: [
-          Colors.black54,
-          Colors.black87,
-          Colors.black87,
-          Colors.black,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+        body: Column(children: [
+          //Initialize the chart widget
+          Container(
+            height: 600,
+            child: SfCartesianChart(
+                primaryXAxis: CategoryAxis(),
+                // Chart title
+                title: ChartTitle(text: '당신의 수익금'),
+                // Enable legend
+                legend: Legend(isVisible: true),
+                // Enable tooltip
+                tooltipBehavior: TooltipBehavior(enable: true, ),
+                series: <ChartSeries<Note, String>>[
+                  LineSeries<Note, String>(
+                      dataSource: data,
+                      xValueMapper: (Note sales, _) => sales.date,
+                      yValueMapper: (Note sales, _) => int.parse(sales.total),
+                      name: '수익금',
+                      // Enable data label
+                      dataLabelSettings: DataLabelSettings(isVisible: true,
+                      )
+                  )
+                ]),
           ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildChart(
-                  BezierChartScale.YEARLY,
-                  context,
-                  LinearGradient(
-                    colors: [
-                      Colors.blueAccent,
-                      Colors.blueAccent[400],
-                      Colors.lightBlue[400],
-                      Colors.lightBlue[500],
-                      Colors.blue,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-              )
-            ],
-          ),
-        )
-    );
+
+        ]));
   }
 }
-_buildChart(BezierChartScale scale, BuildContext context,
-    LinearGradient gradient) {
-  final fromDate = DateTime(2020, 05, 22);
-  final toDate = DateTime.now();
-  final date1 = DateTime.now().subtract(Duration(days: 2));
-  final date2 = DateTime.now().subtract(Duration(days: 3));
-
-  return Center(
-    child: Card(
-      elevation: 10,
-      margin: EdgeInsets.all(15.0),
-      child: Container(
-      decoration: BoxDecoration(
-      gradient: LinearGradient(
-                colors: [
-                  Colors.black54,
-                  Colors.black87,
-                  Colors.black87,
-                  Colors.black,
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  "수익률",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Center(
-                  child: Card(
-                    elevation: 12,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 2,
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: BezierChart(
-                        fromDate: fromDate,
-                        bezierChartScale: BezierChartScale.WEEKLY,
-                        toDate: toDate,
-                        onIndicatorVisible: (val) {
-                          print("Indicator Visible :$val");
-                        },
-                        onDateTimeSelected: (datetime) {
-                          print("selected datetime: $datetime");
-                        },
-                        onScaleChanged: (scale) {
-                          print("Scale: $scale");
-                        },
-                        selectedDate: toDate,
-                        //this is optional
-                        footerDateTimeBuilder: (DateTime value, BezierChartScale scaleType) {
-                          final newFormat = intl.DateFormat('yy/MM/dd');
-                          return newFormat.format(value);
-                        },
-                        series: [
-
-                          BezierLine(
-                            label: "Flight",
-                            lineColor: Colors.white,
-                            onMissingValue: (dateTime) {
-                              if (dateTime.day.isEven) {
-                                return 10.0;
-                              }
-                              return 5.0;
-                            },
-                            data: <DataPoint<DateTime>>[
-                              DataPoint<DateTime>(value: 20, xAxis: date1),
-                              DataPoint<DateTime>(value: 30, xAxis: date2),
-                            ],
-                          ),
-                        ],
-                        config: BezierChartConfig(
-                          startYAxisFromNonZeroValue: false,
-                          displayDataPointWhenNoValue: false,
-                          bubbleIndicatorColor: Colors.white.withOpacity(0.9),
-                          footerHeight: 40,
-                          physics: ClampingScrollPhysics(),
-                          verticalIndicatorStrokeWidth: 3.0,
-                          verticalIndicatorColor: Colors.black26,
-                          showVerticalIndicator: true,
-                          verticalIndicatorFixedPosition: false,
-                          displayYAxis: true,
-                          stepsYAxis: 10,
-                          backgroundGradient: LinearGradient(
-                            colors: [
-                              Colors.blueAccent,
-                              Colors.blueAccent[400],
-                              Colors.lightBlue[400],
-                              Colors.lightBlue[500],
-                              Colors.blue,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                          snap: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )));
-}
-

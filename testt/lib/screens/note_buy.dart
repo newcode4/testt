@@ -173,6 +173,7 @@ class NoteBuyState extends State<NoteBuy> {
                               this.noteList[index].title,
                               this.noteList[index].volume,
                               int.parse(this.noteList[index].total),
+                              this.noteList[index].description,
                             );
                             controller.movedata(this.noteList[index].volume);
                           },
@@ -362,11 +363,7 @@ class NoteBuyState extends State<NoteBuy> {
 }
 
 Widget FinishDiaLog(context, String title, String total, String date) {
-
-
-
   DatabaseBuy databaseHelper = DatabaseBuy();
-
 
   Future<Database> dbFuture = databaseHelper.initializeDatabase();
   dbFuture.then((database) {
@@ -374,11 +371,13 @@ Widget FinishDiaLog(context, String title, String total, String date) {
     noteListFuture.then((noteList) {
       // noteList.where((element) => element.title == title);
       int total = 0;
-      print(3);
-      var f = NumberFormat('###,###,###,###');
-      var filterList = noteList.where((element) => element.title == title).toList();
+      print(noteList.length);
 
-      for(int i =0; i<filterList.length; i++){
+      var f = NumberFormat('###,###,###,###');
+      var filterList =
+          noteList.where((element) => element.title == title).toList();
+
+      for (int i = 0; i < filterList.length; i++) {
         total += int.parse(filterList[i].total);
       }
 
@@ -386,111 +385,111 @@ Widget FinishDiaLog(context, String title, String total, String date) {
           context: context,
           builder: (context) {
             return Scaffold(
-                appBar: AppBar(
-                  title: GestureDetector(child: Text(title),
-                  onTap: (){
+              appBar: AppBar(
+                title: GestureDetector(
+                  child: Text(title),
+                  onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content:  Row(
+                      content: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('합계: ${f.format(total)}원',
+                          Text(
+                            '합계: ${f.format(total)}원',
                             style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold
-                            ),),
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
                       duration: Duration(seconds: 2),
                     ));
-                  },),
-                  centerTitle: true,
+                  },
                 ),
-                body: ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    children: <Widget>[
-                      GroupedListView<Note, String>(
-                        shrinkWrap: true,
-                        elements: filterList,
-                        // 리스트에 사용할 데이터 리스트
-                        groupBy: (element) => element.date.split(' ')[0],
-                        // 데이터 리스트 중 그룹을 지정할 항목
-                        groupComparator: (value1, value2) =>
-                            value2.compareTo(value1),
-                        //groupBy 항목을 비교할 비교기
-                        itemComparator: (item1, item2) => item1.date
-                            .split(' ')[0]
-                            .compareTo(item2.date.split(' ')[0]),
-                        // 그룹안의 데이터 비교기
-                        order: GroupedListOrder.ASC,
-                        //정렬(오름차순)
-                        useStickyGroupSeparators: false,
-                        //가장 위에 그룹 이름을 고정시킬 것인지
-                        groupSeparatorBuilder: (String value) => Padding(
-                          //그룹 타이틀 모양
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            value,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
+                centerTitle: true,
+              ),
+              body: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  children: <Widget>[
+                    GroupedListView<Note, String>(
+                      shrinkWrap: true,
+                      elements: filterList,
+                      // 리스트에 사용할 데이터 리스트
+                      groupBy: (element) => element.date.split(' ')[0],
+                      // 데이터 리스트 중 그룹을 지정할 항목
+                      groupComparator: (value1, value2) =>
+                          value2.compareTo(value1),
+                      //groupBy 항목을 비교할 비교기
+                      itemComparator: (item1, item2) => item1.date
+                          .split(' ')[0]
+                          .compareTo(item2.date.split(' ')[0]),
+                      // 그룹안의 데이터 비교기
+                      order: GroupedListOrder.ASC,
+                      //정렬(오름차순)
+                      useStickyGroupSeparators: false,
+                      //가장 위에 그룹 이름을 고정시킬 것인지
+                      groupSeparatorBuilder: (String value) => Padding(
+                        //그룹 타이틀 모양
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          value,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-
-                        indexedItemBuilder: (build,element,index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: Card(
-                                elevation: 4,
-                                margin: EdgeInsets.all(8),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(13)),
-                                color: Colors.white,
-                                child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    child: ListTile(
-                                      title: Text(
-                                        filterList[index].title,
-                                        style: TextStyle(
-                                          // color: chage
-                                          // ? Colors.redAccent
-                                          //     : Colors.blue,
-                                          fontSize: 16.5,
-                                          fontFamily: 'RobotoMono',
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        "\n거래차익 : ${f.format(int.parse(filterList[index].total))}원",
-                                        style: TextStyle(
-                                          fontSize: 12.5,
-                                          fontFamily: 'RobotoMono',
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ))),
-                          );
-                        },
                       ),
-                    ]),
 
-            // bottomSheet: Padding(
-            //   padding: const EdgeInsets.all(14.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text('합계: ${f.format(total)}원',
-            //       style: TextStyle(
-            //         fontSize: 20,
-            //         fontWeight: FontWeight.bold
-            //       ),),
-            //     ],
-            //   ),
-            // ),
+                      indexedItemBuilder: (build, element, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Card(
+                              elevation: 4,
+                              margin: EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13)),
+                              color: Colors.white,
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  child: ListTile(
+                                    title: Text(
+                                      filterList[index].title,
+                                      style: TextStyle(
+                                        // color: chage
+                                        // ? Colors.redAccent
+                                        //     : Colors.blue,
+                                        fontSize: 16.5,
+                                        fontFamily: 'RobotoMono',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      "\n거래차익 : ${f.format(int.parse(filterList[index].total))}원",
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        fontFamily: 'RobotoMono',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ))),
+                        );
+                      },
+                    ),
+                  ]),
+
+              // bottomSheet: Padding(
+              //   padding: const EdgeInsets.all(14.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text('합계: ${f.format(total)}원',
+              //       style: TextStyle(
+              //         fontSize: 20,
+              //         fontWeight: FontWeight.bold
+              //       ),),
+              //     ],
+              //   ),
+              // ),
             );
           });
     });
   });
 }
-
-

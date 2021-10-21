@@ -77,7 +77,7 @@ class Note {
   }
 
   // Extract a Note object from a Map object
-  Note.fromMapObject(Map<String, dynamic> map) {
+  Note.fromMap(Map<String, dynamic> map) {
     this._id = map['id'];
     this._title = map['title'];
     this._price = map['price'];

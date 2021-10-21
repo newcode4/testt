@@ -287,7 +287,7 @@ void navigateToDetail2(Note note, String title, BuildContext context) async {
   }));
 }
 
-LogDiaLog(context,int id, String title, String Volume, int datatotal) {
+LogDiaLog(context,int id, String title, String Volume, int datatotal,String description) {
   TextEditingController price = TextEditingController();
   final controller = Get.put(BuilderController());
   controller.resultdata(double.parse(Volume), 0);

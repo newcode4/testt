@@ -23,7 +23,7 @@ class _MoveGraphState extends State<MoveGraph> {
   final _duration = Duration(milliseconds: 300);
   final _curve = Curves.easeInOutCubic;
   final _pages = [
-    BarChart(),
+    LineChart(),
     // LineGraph(),
     // PieChartPage(),
     // BarChartPage3(),
