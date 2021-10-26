@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:testt/modal_class/models.dart';
 import 'logutil.dart';
 
@@ -15,6 +16,23 @@ class Utils {
         duration: Duration(seconds: 2),
       ),
     );
+  }
+  static String formatNumber(double number){
+    String style="#.##";
+
+    NumberFormat numberFormat=new NumberFormat(style);
+
+    return numberFormat.format(number);
+
+  }
+
+  static void closeKeybord(BuildContext context){
+
+    FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  static int currentTimeMillis() {
+    return new DateTime.now().millisecondsSinceEpoch;
   }
 
   static Widget getSusItem(BuildContext context, String tag,
@@ -124,4 +142,16 @@ class Utils {
       },
     );
   }
+}
+
+class Palette {
+  // background gradient
+  static Color blueSky = Color(0xFF068FFA);
+  static Color greenLand = Color(0xFF89ED91);
+
+  // card gradient
+  static Color blueSkyLight = Color(0x40068FFA);
+  static Color greenLandLight = Color(0x4089ED91);
+
+  static Color blueSkyLighter = Color(0x10068FFA);
 }

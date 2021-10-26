@@ -24,7 +24,7 @@ class _MoveGraphState extends State<MoveGraph> {
   final _curve = Curves.easeInOutCubic;
   final _pages = [
     LineChart(),
-    // LineGraph(),
+    BarChart(),
     // PieChartPage(),
     // BarChartPage3(),
   ];

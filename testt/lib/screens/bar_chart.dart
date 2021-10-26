@@ -1,228 +1,280 @@
-// import 'package:bezier_chart/bezier_chart.dart';
-// import 'package:flutter/material.dart';
-//
-// class BarChart extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       debugShowCheckedModeBanner: false,
-//       home: MyHomePage(),
-//     );
-//   }
-// }
-//
-// class MyHomePage extends StatelessWidget {
-//   _onTap(BuildContext context, Widget widget) {
-//     Navigator.of(context).push(
-//       MaterialPageRoute(
-//         builder: (_) => Scaffold(
-//           appBar: AppBar(),
-//           body: widget,
-//         ),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//         title: Text("Bezier Chart Sample"),
-//     ),
-//     body: Container(
-//     decoration: BoxDecoration(
-//     gradient: LinearGradient(
-//     begin: Alignment.topCenter,
-//     end: Alignment.bottomCenter,
-//     colors: [
-//     Colors.black54,
-//     Colors.black87,
-//     Colors.black87,
-//     ],
-//     ),
-//     ),
-//     child: Column(
-//     mainAxisAlignment: MainAxisAlignment.center,
-//     children: [
-//     Text(
-//     "Bezier Chart",
-//     style: TextStyle(
-//     color: Colors.white,
-//     fontSize: 30,
-//     fontWeight: FontWeight.w500,
-//     ),
-//     ),
-//
-//     _buildChart(
-//     BezierChartScale.YEARLY,
-//     context,
-//     LinearGradient(
-//     colors: [
-//     Colors.purple[300],
-//     Colors.purple[400],
-//     Colors.purple[400],
-//     Colors.purple[500],
-//     Colors.purple,
-//     ],
-//     begin: Alignment.topCenter,
-//     end: Alignment.bottomCenter,
-//     ))
-//     ],
-//     ),
-//     )
-//     );
-//     }
-// }
-//   _buildChart(BezierChartScale scale, BuildContext context,
-//       LinearGradient gradient) {
-//     final fromDate = DateTime(2018, 11, 22);
-//     final toDate = DateTime.now();
-//
-//     final date1 = DateTime.now().subtract(Duration(days: 2));
-//     final date2 = DateTime.now().subtract(Duration(days: 3));
-//
-//     final date3 = DateTime.now().subtract(Duration(days: 2));
-//     final date4 = DateTime.now().subtract(Duration(days: 2));
-//
-//     final date5 = DateTime.now().subtract(Duration(days: 2));
-//     final date6 = DateTime.now().subtract(Duration(days: 652));
-//
-//     return Center(
-//       child: Card(
-//         elevation: 10,
-//         margin: EdgeInsets.all(15.0),
-//         child: Container(
-//           color: Colors.red,
-//           height: MediaQuery.of(context).size.height / 1.8,
-//           width: MediaQuery.of(context).size.width,
-//           child: BezierChart(
-//             bezierChartScale: scale,
-//             fromDate: fromDate,
-//             toDate: toDate,
-//             selectedDate: toDate,
-//             series: [
-//               BezierLine(
-//                 label: "Duty",
-//                 onMissingValue: (dateTime) {
-//                   if (dateTime.year.isEven) {
-//                     return 20.0;
-//                   }
-//                   return 5.0;
-//                 },
-//                 data: <DataPoint<DateTime>>[
-//                   DataPoint<DateTime>(value: 10, xAxis: date1),
-//                   DataPoint<DateTime>(value: 50, xAxis: date2),
-//                   DataPoint<DateTime>(value: 100, xAxis: date3),
-//                   DataPoint<DateTime>(value: 100, xAxis: date4),
-//                   DataPoint<DateTime>(value: 40, xAxis: date5),
-//                   DataPoint<DateTime>(value: 47, xAxis: date6),
-//                 ],
-//               ),
-//
-//             ],
-//             config: BezierChartConfig(
-//               startYAxisFromNonZeroValue: true,
-//               verticalIndicatorStrokeWidth: 3.0,
-//               verticalIndicatorColor: Colors.black26,
-//               showVerticalIndicator: true,
-//               verticalIndicatorFixedPosition: false,
-//               backgroundGradient: gradient,
-//               footerHeight: 35.0,
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//
-//
-//
-// //SAMPLE CUSTOM VALUES
-// Widget sample1(BuildContext context) {
-//   return Container(
-//     decoration: BoxDecoration(
-//       gradient: LinearGradient(
-//         colors: [
-//           Colors.black54,
-//           Colors.black87,
-//           Colors.black87,
-//           Colors.black,
-//         ],
-//         begin: Alignment.topCenter,
-//         end: Alignment.bottomCenter,
-//       ),
-//     ),
-//     child: Column(
-//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       children: [
-//         Text(
-//           "Bezier Chart - Numbers",
-//           style: TextStyle(
-//             color: Colors.white,
-//             fontSize: 28,
-//             fontWeight: FontWeight.w700,
-//           ),
-//         ),
-//         Center(
-//           child: Card(
-//             elevation: 12,
-//             child: Container(
-//               height: MediaQuery.of(context).size.height / 2,
-//               width: MediaQuery.of(context).size.width * 0.9,
-//               child: BezierChart(
-//                 bezierChartScale: BezierChartScale.CUSTOM,
-//                 selectedValue: 30,
-//                 xAxisCustomValues: const [0, 5, 10, 15, 20, 25, 30, 35],
-//                 footerValueBuilder: (double value) {
-//                   return "${formatAsIntOrDouble(value)}\ndays";
-//                 },
-//                 series: const [
-//                   BezierLine(
-//                     label: "m",
-//                     data: const [
-//                       DataPoint<double>(value: 10, xAxis: 0),
-//                       DataPoint<double>(value: 130, xAxis: 5),
-//                       DataPoint<double>(value: 50, xAxis: 10),
-//                       DataPoint<double>(value: 150, xAxis: 15),
-//                       DataPoint<double>(value: 75, xAxis: 20),
-//                       DataPoint<double>(value: 0, xAxis: 25),
-//                       DataPoint<double>(value: 5, xAxis: 30),
-//                       DataPoint<double>(value: 45, xAxis: 35),
-//                     ],
-//                   ),
-//                 ],
-//                 config: BezierChartConfig(
-//                   startYAxisFromNonZeroValue: false,
-//                   bubbleIndicatorColor: Colors.white.withOpacity(0.9),
-//                   footerHeight: 40,
-//                   verticalIndicatorStrokeWidth: 3.0,
-//                   verticalIndicatorColor: Colors.black26,
-//                   showVerticalIndicator: true,
-//                   verticalIndicatorFixedPosition: false,
-//                   displayYAxis: true,
-//                   stepsYAxis: 10,
-//                   backgroundGradient: LinearGradient(
-//                     colors: [
-//                       Colors.red[300],
-//                       Colors.red[400],
-//                       Colors.red[400],
-//                       Colors.red[500],
-//                       Colors.red,
-//                     ],
-//                     begin: Alignment.topCenter,
-//                     end: Alignment.bottomCenter,
-//                   ),
-//                   snap: true,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testt/common/Constants.dart';
+import 'package:testt/db_helper/db_helper.dart';
+import 'package:testt/modal_class/notes.dart';
+import 'package:testt/screens/line_chart/line_chart.dart';
+import 'package:testt/utils/toolsUtilities.dart';
+
+class BarChart extends StatefulWidget {
+  // ignore: prefer_const_constructors_in_immutables
+  BarChart({Key key}) : super(key: key);
+
+  @override
+  _BarChartState createState() => _BarChartState();
+}
+
+class _BarChartState extends State<BarChart> {
+  ZoomPanBehavior _zoomPanBehavior;
+  SelectionBehavior _selectionBehavior;
+
+
+  @override
+  void initState() {
+
+    _selectionBehavior =  SelectionBehavior(enable: true);
+    _zoomPanBehavior = ZoomPanBehavior(
+      enablePinching: true,
+      zoomMode: ZoomMode.x,
+      enablePanning: true,
+    );
+
+    day();
+    monthday();
+    yearday();
+    super.initState();
+  }
+
+  void day() async {
+    DatabaseBuy databaseHelper = DatabaseBuy();
+
+    Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    await dbFuture.then((database) {
+      Future<List<Note>> noteListFuture = databaseHelper.getNoteList3();
+      noteListFuture.then((noteList) {
+        var filterList = noteList;
+        for (int i = 0; i < filterList.length ; i++) {
+          test.add(noteList[i]);
+        }
+        return money.write('note', test);
+      });
+    });
+  }
+
+  void monthday() async {
+    DatabaseBuy databaseHelper = DatabaseBuy();
+
+    Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    await dbFuture.then((database) {
+      Future<List<Note>> noteListFuture = databaseHelper.getNoteList4();
+      noteListFuture.then((noteList) {
+
+        var filterList = noteList;
+        test=[];
+        for (int i = 0; i < filterList.length ; i++) {
+
+          test.add(noteList[i]);
+        }
+
+
+        return money.write('note_month', test);
+      });
+    });
+  }
+
+  void yearday() async {
+    DatabaseBuy databaseHelper = DatabaseBuy();
+
+    Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    await dbFuture.then((database) {
+      Future<List<Note>> noteListFuture = databaseHelper.getNoteList3();
+      noteListFuture.then((noteList) {
+        test=[];
+        var filterList = noteList;
+        for (int i = 0; i < filterList.length ; i++) {
+          test.add(noteList[i]);
+        }
+
+        return money.write('note_year', test);
+      });
+    });
+  }
+
+  List<Note> data = money.read('note');
+  List<Note> month_data = money.read('note_month');
+  List<Note> year_data = money.read('note_year');
+  List<Note> test = [];
+
+
+  var tab = true? LineSeries : ColumnSeries;
+
+
+  Widget myAppBar() {
+    return AppBar(
+      title: const Text('막대 그래프'),
+      centerTitle: true,
+      bottom: TabBar(
+        indicatorColor: Colors.black,
+        tabs: <Widget>[
+          Tab(
+            child: Text('일', style: TextStyle(color: Colors.black)),
+          ),
+          Tab(
+            child: Text('월', style: TextStyle(color: Colors.black)),
+          ),
+          Tab(
+            child: Text('년', style: TextStyle(color: Colors.black)),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var f = NumberFormat('###,###,###,###');
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: myAppBar(),
+
+        body: TabBarView(children: <Widget>[
+          DrawChartDay(context, f),
+          DrawChartMonth(context, f),
+          DrawChartYear(context, f),
+
+        ]),
+      ),
+    );
+  }
+
+  Column DrawChartDay(BuildContext context, NumberFormat f) {
+    return Column(children: [
+      //Initialize the chart widget
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height:490,
+        child: SfCartesianChart(
+            onSelectionChanged: (SelectionArgs args){
+              args.selectedColor = Colors.red;
+              args.unselectedColor = Colors.lightBlue;
+            },
+            zoomPanBehavior: _zoomPanBehavior,
+            primaryXAxis: CategoryAxis(),
+            // Chart title
+            title: ChartTitle(text: '--당신의 수익금--'),
+            // Enable legend
+            legend: Legend(isVisible: true),
+            // Enable tooltip
+            tooltipBehavior: TooltipBehavior(
+                enable: true,
+                format: 'point.x\n\n'
+                    'point.y원'
+
+            ),
+            series: <ChartSeries<Note, String>>[
+              ColumnSeries<Note, String>(
+                  dataSource: data,
+                  xValueMapper: (Note sales, _) => sales.date,
+                  yValueMapper: (Note sales, _) => int.parse(sales.total),
+                  dataLabelMapper: (Note sales, _) => '${f.format(int.parse(sales.total))}원',
+                  selectionBehavior: _selectionBehavior,
+                  markerSettings: MarkerSettings(
+                      isVisible: true
+                  ),
+                  name: '수익금',
+                  // Enable data label
+                  dataLabelSettings: DataLabelSettings(
+                      isVisible: true
+                  ))
+            ]),
+      ),
+      SizedBox(height: 15,),
+    
+
+    ]);
+  }
+  Column DrawChartMonth(BuildContext context, NumberFormat f) {
+    return Column(children: [
+      //Initialize the chart widget
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: 490,
+        child: SfCartesianChart(
+            onSelectionChanged: (SelectionArgs args){
+              args.selectedColor = Colors.red;
+              args.unselectedColor = Colors.lightBlue;
+            },
+            zoomPanBehavior: _zoomPanBehavior,
+            primaryXAxis: CategoryAxis(),
+            // Chart title
+            title: ChartTitle(text: '--당신의 수익금--'),
+            // Enable legend
+            legend: Legend(isVisible: true),
+            // Enable tooltip
+            tooltipBehavior: TooltipBehavior(
+                enable: true,
+                format: 'point.x\n\n'
+                    'point.y원'
+
+            ),
+            series: <ChartSeries<Note, String>>[
+              ColumnSeries<Note, String>(
+                  dataSource: month_data,
+                  xValueMapper: (Note sales, _) => sales.date,
+                  yValueMapper: (Note sales, _) => int.parse(sales.total),
+                  dataLabelMapper: (Note sales, _) => '${f.format(int.parse(sales.total))}원',
+                  selectionBehavior: _selectionBehavior,
+                  markerSettings: MarkerSettings(
+                      isVisible: true
+                  ),
+                  name: '수익금',
+                  // Enable data label
+                  dataLabelSettings: DataLabelSettings(
+                      isVisible: true
+                  ))
+            ]),
+      ),
+      SizedBox(height: 15,),
+
+    ]);
+  }
+  Column DrawChartYear(BuildContext context, NumberFormat f) {
+    return Column(children: [
+      //Initialize the chart widget
+      Container(
+        width: MediaQuery.of(context).size.width,
+        height: 490,
+        child: SfCartesianChart(
+            onSelectionChanged: (SelectionArgs args){
+              args.selectedColor = Colors.red;
+              args.unselectedColor = Colors.lightBlue;
+            },
+            zoomPanBehavior: _zoomPanBehavior,
+            primaryXAxis: CategoryAxis(),
+            // Chart title
+            title: ChartTitle(text: '--당신의 수익금--'),
+            // Enable legend
+            legend: Legend(isVisible: true),
+            // Enable tooltip
+            tooltipBehavior: TooltipBehavior(
+                enable: true,
+                format: 'point.x\n\n'
+                    'point.y원'
+
+            ),
+            series: <ChartSeries<Note, String>>[
+              ColumnSeries<Note, String>(
+                  dataSource: year_data,
+                  xValueMapper: (Note sales, _) => sales.date,
+                  yValueMapper: (Note sales, _) => int.parse(sales.total),
+                  dataLabelMapper: (Note sales, _) => '${f.format(int.parse(sales.total))}원',
+                  selectionBehavior: _selectionBehavior,
+                  markerSettings: MarkerSettings(
+                      isVisible: true
+                  ),
+                  name: '수익금',
+                  // Enable data label
+                  dataLabelSettings: DataLabelSettings(
+                      isVisible: true
+                  ))
+            ]),
+      ),
+      SizedBox(height: 15,),
+
+
+    ]);
+  }
+}

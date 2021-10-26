@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:testt/common/Constants.dart';
 
 
@@ -99,5 +100,52 @@ class BuilderController extends GetxController {
       total = count*price;
     update();
   }
+}
+
+class CalculateGetx extends GetxController{
+
+  var f = NumberFormat('###,###,###,###.##');
+
+  double totalPurchase=0;
+  double totalFee=0;
+  double extimatedMoney=0;
+  double extimatedRate=0;
+  double interestTotal=0;
+  double baseMoney=0;
+  bool isRoll=false;
+  double totalSales=0;
+  double tax;
+  double avgpurchase=0;
+  double avgvolume=0;
+  double avgtotal=0;
+
+  AvgPurchase(double money,double volume){
+    avgpurchase = money;
+    avgvolume = volume;
+    avgtotal = money*volume;
+    update();
+  }
+
+  TotalPurchase(double money,double target,int volume){
+    totalPurchase = money * volume;
+    update();
+  }
+  TotalFee(double money,double target,int volume){
+    totalFee = (money * volume) * 0.05;
+    update();
+  }
+  ExtimatedMoney(double money,double target,int volume){
+    extimatedMoney = (money*target)-((money * volume)*0.05);
+    update();
+  }
+  ExtimatedRate(double money,double target,int volume){
+    extimatedRate = ((money*target)/(money * volume))*100;
+    update();
+  }
+  TotalSales(double money,double target,int volume){
+    totalSales = money * target;
+    update();
+  }
+
 }
 

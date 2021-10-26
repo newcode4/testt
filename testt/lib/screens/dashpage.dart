@@ -3,8 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:testt/common/Constants.dart';
+import 'package:testt/common/dialog.dart';
 import 'package:testt/db_helper/db_helper.dart';
 import 'package:testt/modal_class/GetxController.dart';
+import 'package:testt/modal_class/notes.dart';
+import 'package:testt/screens/Calculate.dart';
+
+import 'cash_page.dart';
 
 class DashPage extends StatefulWidget {
   DashPage({Key key, this.title}) : super(key: key);
@@ -20,6 +25,7 @@ class _DashPageState extends State<DashPage> {
 
   int money;
   String profit;
+  String month_total = '0';
 
 
   @override
@@ -27,6 +33,7 @@ class _DashPageState extends State<DashPage> {
     asyncMethod();
     money =  box.read('money');
     profit = box.read('profit');
+    month_total = box.read('month_total');
 
     super.initState();
   }
@@ -38,8 +45,19 @@ class _DashPageState extends State<DashPage> {
               .toString()
               .length - 1);
 
+
           box.write('profit',profit2);
-          print(profit2);
+          // print(profit2);
+        }));
+
+    await DatabaseBuy().MonthTotal().then((value) =>
+        value.forEach((element) async {
+
+          String month_total = await element.values.toString().substring(1, element.values
+              .toString()
+              .length - 1);
+          box.write('month_total',month_total);
+          print(month_total);
         }));
   }
 
@@ -48,6 +66,9 @@ class _DashPageState extends State<DashPage> {
     final controller =  Get.put(Money());
     if(profit==null) profit ='0';
     controller.RateReturn(int.parse(profit), money);
+
+    var _toDay = DateTime.now();
+    var _toMonth = DateFormat('M').format(_toDay).toString();
     var f = NumberFormat('###,###,###,###');
     return Scaffold(
       body: Container(
@@ -64,8 +85,8 @@ class _DashPageState extends State<DashPage> {
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.7),
-                blurRadius: 20,
-                spreadRadius: 10,
+                blurRadius: 3,
+                spreadRadius: 3,
               )
             ],
             color: Colors.indigo[500],
@@ -104,6 +125,7 @@ class _DashPageState extends State<DashPage> {
                       RaisedButton(
                       onPressed: () {
                 DepositDialog(context,profit);
+
                 },
                   child: Text('입금'),
                   color: Colors.blue,
@@ -160,7 +182,7 @@ class _DashPageState extends State<DashPage> {
         ),
         Row(
           children: [
-            Text('수익금 : ${f.format(int.parse(profit))}원',
+            Text('  수익금 :  ${f.format(int.parse(profit))}원',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -180,7 +202,7 @@ class _DashPageState extends State<DashPage> {
                   total.write('total',money_total);
                   box.write('money', _.count3);
                   return Text(
-                    '합계 : ${f.format(_.count3 + int.parse(profit))}원',
+                    '   합계 :     ${f.format( int.parse(profit)- _.count3 )}원',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -214,20 +236,49 @@ class _DashPageState extends State<DashPage> {
                               boxShadow: [
                                 BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
-                                    spreadRadius: 6,
-                                    blurRadius: 4)
+                                    spreadRadius: 2,
+                                    blurRadius: 2)
                               ]),
                           child: Padding(
                             padding: const EdgeInsets.only(top: 17),
                             child: Column(
                               children: <Widget>[
-                                Icon(
-                                  Icons.dashboard,
-                                  color: Colors.white,
+                                Text(
+                                  '$_toMonth월 수익',
+                                  style: TextStyle(color: Colors.white70),
                                 ),
                                 Text(
-                                  '이번달 수익률',
-                                  style: TextStyle(color: Colors.white),
+                                  '${f.format(int.parse(month_total))}원'
+                                      ,style: TextStyle(color: Colors.white),
+                                )
+
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 80,
+                          width: 90,
+                          decoration: BoxDecoration(
+                              color: Colors.indigo[500],
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 2)
+                              ]),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 17),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  '예상 세금',
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                Text(
+                                  '${f.format(int.parse(month_total))}원'
+                                  ,style: TextStyle(color: Colors.white),
                                 )
                               ],
                             ),
@@ -242,48 +293,28 @@ class _DashPageState extends State<DashPage> {
                               boxShadow: [
                                 BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
-                                    spreadRadius: 6,
-                                    blurRadius: 4)
+                                    spreadRadius: 2,
+                                    blurRadius: 2)
                               ]),
                           child: Padding(
                             padding: const EdgeInsets.only(top: 17),
-                            child: Column(
-                              children: <Widget>[
-                                Icon(Icons.account_balance,
-                                    color: Colors.white),
-                                Text(
-                                  '현금내역',
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 80,
-                          width: 90,
-                          decoration: BoxDecoration(
-                              color: Colors.indigo[500],
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
-                                    spreadRadius: 6,
-                                    blurRadius: 4)
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 17),
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.credit_card,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  '거래내역',
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
+                            child: GestureDetector(
+                              child: Column(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.calculate,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    '계산기',
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),onTap: (){
+                                Navigator.push(
+                                  context,MaterialPageRoute(builder: (context) => Calculate())
+                                );
+                            },
                             ),
                           ),
                         )
@@ -304,19 +335,50 @@ class _DashPageState extends State<DashPage> {
                               boxShadow: [
                                 BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
-                                    spreadRadius: 6,
-                                    blurRadius: 4)
+                                    spreadRadius: 2,
+                                    blurRadius: 2)
+                              ]),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 17),
+                            child: GestureDetector(
+                              child: Column(
+                                children: <Widget>[
+                                  Icon(Icons.account_balance,
+                                      color: Colors.white),
+                                  Text(
+                                    '현금내역',
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
+                              ),
+                              onTap: (){
+                                CashDiaLog(context);
+                              },
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 80,
+                          width: 90,
+                          decoration: BoxDecoration(
+                              color: Colors.indigo[500],
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 2)
                               ]),
                           child: Padding(
                             padding: const EdgeInsets.only(top: 17),
                             child: Column(
                               children: <Widget>[
                                 Icon(
-                                  Icons.language,
+                                  Icons.star,
                                   color: Colors.white,
                                 ),
                                 Text(
-                                  '이번달 최고',
+                                  '즐겨찾기',
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
@@ -332,36 +394,8 @@ class _DashPageState extends State<DashPage> {
                               boxShadow: [
                                 BoxShadow(
                                     color: Colors.black.withOpacity(0.3),
-                                    spreadRadius: 6,
-                                    blurRadius: 4)
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 17),
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.question_answer,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  '이번달 최악',
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 80,
-                          width: 90,
-                          decoration: BoxDecoration(
-                              color: Colors.indigo[500],
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
-                                    spreadRadius: 6,
-                                    blurRadius: 4)
+                                    spreadRadius: 2,
+                                    blurRadius: 2)
                               ]),
                           child: Padding(
                             padding: const EdgeInsets.only(top: 17),
@@ -372,7 +406,7 @@ class _DashPageState extends State<DashPage> {
                                   color: Colors.white,
                                 ),
                                 Text(
-                                  '코인정보',
+                                  '엑셀 출력',
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
@@ -478,6 +512,7 @@ DepositDialog(context,profit) {
 
                                 controller.CountPlus(money);
                                 controller.RateReturn(int.parse(profit), controller.count3);
+                                _save('입금', 'volume', money);
                                 Navigator.pop(context);
                               })
                         ]),
@@ -573,7 +608,7 @@ DepositDialog2(context,profit,money2) {
                                 int money = int.parse(price.text);
                                 controller.CountMinus(money);
                                 controller.RateReturn(int.parse(profit),  controller.count3);
-
+                                _save('출금', 'volume', money);
                                 Navigator.pop(context);
                               })
                         ]),
@@ -582,4 +617,20 @@ DepositDialog2(context,profit,money2) {
           ));
     },
   );
+}
+
+void _save(String title, String volume, int total) async {
+  DatabaseBuy helper = DatabaseBuy();
+  Note note;
+  note = Note(
+      title, DateFormat('yyyy-MM-dd').format(DateTime.now()), volume, '',
+      total.toString(), '','');
+
+
+  if (note.id != null) {
+    await helper.updateNote3(note);
+  } else {
+    await helper.insertMoney(note);
+    await helper.updateNote3(note);
+  }
 }

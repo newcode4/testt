@@ -31,6 +31,9 @@ class NoteBuyState extends State<NoteBuy> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     if (noteList == null) {
       noteList = [];
       updateListView();
@@ -364,6 +367,8 @@ class NoteBuyState extends State<NoteBuy> {
 
 Widget FinishDiaLog(context, String title, String total, String date) {
   DatabaseBuy databaseHelper = DatabaseBuy();
+
+  DatabaseBuy().getNoteMapList2().then((value) => print(value));
 
   Future<Database> dbFuture = databaseHelper.initializeDatabase();
   dbFuture.then((database) {

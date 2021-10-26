@@ -51,7 +51,7 @@ class _StarterPageState extends State<StarterPage> {
         items: <Widget>[
           Icon(Icons.home,color: ToolsUtilities.whiteColor, size: 20,),
           Icon(Icons.text_snippet,color: ToolsUtilities.whiteColor, size: 20,),
-          Icon(Icons.trending_up,color: ToolsUtilities.whiteColor, size: 20),
+          Icon(Icons.trending_up,color: ToolsUtilities.whiteColor, size: 20,),
           Icon(Icons.dashboard,color: ToolsUtilities.whiteColor, size: 20),
         ],
         color: ToolsUtilities.secondColor,
