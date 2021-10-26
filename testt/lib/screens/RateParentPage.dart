@@ -26,7 +26,7 @@ class _RateParentPageState extends State<RateParentPage> {
   bool isNormal = false;
 
   double money=0,money2=0,money3=0;
-  int volume=0,volume2=0,volume3=0,volume4=0,volume5=0;
+  double volume=0,volume2=0,volume3=0,volume4=0,volume5=0;
   double target,target2=0;
   TextEditingController moneyController;
   TextEditingController moneyController2;
@@ -47,12 +47,12 @@ class _RateParentPageState extends State<RateParentPage> {
   void initState() {
     super.initState();
 
-    moneyController = new TextEditingController(text: '0');
-    moneyController2 = new TextEditingController(text: '0');
-    moneyController3 = new TextEditingController(text: '0');
-   VolumeController = new TextEditingController(text: '0');
-    VolumeController2 = new TextEditingController(text: '0');
-    VolumeController3 = new TextEditingController(text: '0');
+    moneyController = new TextEditingController();
+    moneyController2 = new TextEditingController();
+    moneyController3 = new TextEditingController();
+   VolumeController = new TextEditingController();
+    VolumeController2 = new TextEditingController();
+    VolumeController3 = new TextEditingController();
     VolumeController4 = new TextEditingController();
     VolumeController5 = new TextEditingController();
     TargetController = new TextEditingController();
@@ -81,9 +81,9 @@ class _RateParentPageState extends State<RateParentPage> {
     money2 = double.parse(moneyController2.text);
     money3 = double.parse(moneyController3.text);
 
-    volume = int.parse(VolumeController.text);
-    volume2 = int.parse(VolumeController2.text);
-    volume3 = int.parse(VolumeController3.text);
+    volume = double.parse(VolumeController.text);
+    volume2 = double.parse(VolumeController2.text);
+    volume3 = double.parse(VolumeController3.text);
 
     target = double.parse(TargetController.text);
     target2 = double.parse(TargetController2.text);
@@ -105,12 +105,12 @@ class _RateParentPageState extends State<RateParentPage> {
       return null;
     }
 
-    LoandInfo info = calc(money, target, volume);
+    // LoandInfo info = calc(money, target, volume);
 
-    setState(() {
-      rateMoney = info.interestTotal;
-      displayDetail = info.toString();
-    });
+    // setState(() {
+    //   rateMoney = info.interestTotal;
+    //   displayDetail = info.toString();
+    // });
   }
 
   @override
@@ -161,9 +161,8 @@ class _RateParentPageState extends State<RateParentPage> {
                                 hintStyle: TextStyle(color: Colors.grey[300])),
                             cursorColor: Colors.blue,
                             onChanged: (value){
-
-                              CalculateAVG(moneyController.text,moneyController2.text,moneyController3.text,
-                              VolumeController.text,VolumeController2.text,VolumeController3.text);
+                              money = double.parse(moneyController.text);
+                              CalculateAVG();
                             },
                           ),
                         ),
@@ -180,8 +179,8 @@ class _RateParentPageState extends State<RateParentPage> {
                                 hintStyle: TextStyle(color: Colors.grey[300])),
                             cursorColor: Colors.blue,
                             onChanged: (value){
-                              CalculateAVG(moneyController.text,moneyController2.text,moneyController3.text,
-                                  VolumeController.text,VolumeController2.text,VolumeController3.text);
+                              volume = double.parse(VolumeController.text);
+                              CalculateAVG();
                             },
                           ),
                         ),
@@ -220,8 +219,8 @@ class _RateParentPageState extends State<RateParentPage> {
                                 hintStyle: TextStyle(color: Colors.grey[300])),
                             cursorColor: Colors.blue,
                             onChanged: (value){
-                              CalculateAVG(moneyController.text,moneyController2.text,moneyController3.text,
-                                  VolumeController.text,VolumeController2.text,VolumeController3.text);
+                              money2 = double.parse(moneyController2.text);
+                              CalculateAVG();
                             },
                           ),
                         ),
@@ -238,8 +237,8 @@ class _RateParentPageState extends State<RateParentPage> {
                                 hintStyle: TextStyle(color: Colors.grey[300])),
                             cursorColor: Colors.blue,
                             onChanged: (value){
-                              CalculateAVG(moneyController.text,moneyController2.text,moneyController3.text,
-                                  VolumeController.text,VolumeController2.text,VolumeController3.text);
+                              volume2 = double.parse(VolumeController2.text);
+                              CalculateAVG();
                             },
                           ),
                         ),
@@ -278,8 +277,8 @@ class _RateParentPageState extends State<RateParentPage> {
                                 hintStyle: TextStyle(color: Colors.grey[300])),
                             cursorColor: Colors.blue,
                             onChanged: (value){
-                              CalculateAVG(moneyController.text,moneyController2.text,moneyController3.text,
-                                  VolumeController.text,VolumeController2.text,VolumeController3.text);
+                              money3 = double.parse(moneyController3.text);
+                              CalculateAVG();
                             },
                           ),
                         ),
@@ -296,8 +295,8 @@ class _RateParentPageState extends State<RateParentPage> {
                                 hintStyle: TextStyle(color: Colors.grey[300])),
                             cursorColor: Colors.blue,
                             onChanged: (value){
-                              CalculateAVG(moneyController.text,moneyController2.text,moneyController3.text,
-                                  VolumeController.text,VolumeController2.text,VolumeController3.text);
+                              volume3 = double.parse(VolumeController3.text);
+                              CalculateAVG();
                             },
                           ),
                         ),
@@ -347,7 +346,7 @@ class _RateParentPageState extends State<RateParentPage> {
                             Flexible(
                               child: Container(
                                   margin: EdgeInsets.only(right: 20),
-                                  child: Text('${f.format(_.avgvolume)}원',
+                                  child: Text('${f.format(_.avgvolume)}개',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -557,6 +556,12 @@ class _RateParentPageState extends State<RateParentPage> {
           VolumeController5.clear();
           TargetController.clear();
           TargetController2.clear();
+          money=0;
+          money2=0;
+          money3=0;
+          volume=0;
+          volume2=0;
+          volume3=0;
           controller.AvgPurchase(0, 0);
         })),
       ),
@@ -564,60 +569,65 @@ class _RateParentPageState extends State<RateParentPage> {
     );
   }
 
-  Widget CalculateAVG(m1,m2,m3,v1,v2,v3) {
+  Widget CalculateAVG() {
+    
+    //  print(money);
+    // print(money2);
+    // print(money3);
 
-    var a1 =0.0;
-    var a2 =0.0;
-    var a3 =0.0;
-    var x1 =0.0;
-    var x2 =0.0;
-    var x3 =0.0;
+     if(money==0.0&&volume==0.0){
+       var avg_m = money2;
+       var avg_v = volume2;
 
-     a1 = double.parse(m1==isNull? 0.0 : m1);
-     a2 = double.parse(m2==isNull? 0.0 : m2);
-     a3 = double.parse(m3==isNull? 0.0 : m3);
+       print(1);
 
-     // print(m3==isNull? 0.0 : m3);
+       controller.AvgPurchase(avg_m, avg_v);
+     }
 
-     x1 = double.parse(v1==isNull? 0.0 : v1);
-     x2 = double.parse(v2==isNull? 0.0 : v2);
-     x3 = double.parse(v3==isNull? 0.0 : v3);
+    else if(money2==0.0&&volume2==0.0){
+      var avg_m = money;
+      var avg_v = volume;
+      print(2);
+      controller.AvgPurchase(avg_m, avg_v);
+    }
 
-     print('$a1\n$a2\n$a3\n$v1\n$v2\n$v3');
-     print(3);
+    else if(money3==0.0&&volume3==0.0){
+      var avg_m = (money+money2)/2;
+      var avg_v = (volume+volume2)/2;
+      print(3);
+      controller.AvgPurchase(avg_m, avg_v);
+    }
 
-     if()
+    else if((money3==0.0&&volume3==0.0)&&(money2==0.0&&volume2==0.0)){
+      var avg_m = money;
+      var avg_v = volume;
 
-    var avg_m = (a1+a2+a3)/3;
-    var avg_v = (x1+x2+x3)/3;
+      print(4);
+      controller.AvgPurchase(avg_m, avg_v);
+    }
 
-    controller.AvgPurchase(avg_m, avg_v);
+    else if((money3==0.0&&volume3==0.0)&&(money==0.0&&volume==0.0)){
+      var avg_m = money2;
+      var avg_v = volume2;
+      print(5);
+      controller.AvgPurchase(avg_m, avg_v);
+    }
+
+    else if((money2==0.0&&volume2==0.0)&&(money==0.0&&volume==0.0)){
+      var avg_m = money3;
+      var avg_v = volume3;
+      print(6);
+      controller.AvgPurchase(avg_m, avg_v);
+    } else {
+       var avg_m = (money+money2+money3) / 3;
+       var avg_v = (volume+volume2+volume3) / 3;
+       print(7);
+       controller.AvgPurchase(avg_m, avg_v);
+     }
 
 
 
 
-    // if(m1.isBlank && v1.isBlank) {m1=0.0; v1=0.0;}
-    // else{
-    //   var avg_m = (m1+m2+m3)/3;
-    //   var avg_v = (v1+v2+v3)/3;
-    //
-    // controller.AvgPurchase(avg_m, avg_v);}
-    // if(m2.isBlank && v2.isBlank) {m2=0.0; v2=0.0;}
-    // else{
-    //   var avg_m = (m1+m2+m3)/3;
-    //   var avg_v = (v1+v2+v3)/3;
-    //
-    //   controller.AvgPurchase(avg_m, avg_v);}
-    //
-    // if(m3.isBlank && v3.isBlank) {m3=0.0; v3=0.0;}
-    // else{
-    //   var avg_m = (m1+m2+m3)/3;
-    //   var avg_v = (v1+v2+v3)/3;
-    //
-    //   controller.AvgPurchase(avg_m, avg_v);}
-    //
-    // var avg_m = (m1+m2+m3)/3;
-    // var avg_v = (v1+v2+v3)/3;
 
 
 
