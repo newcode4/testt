@@ -5,6 +5,7 @@ import 'package:azlistview/azlistview.dart';
 import 'package:github_language_colors/github_language_colors.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:testt/common/dialog.dart';
+import 'package:testt/library/language.dart';
 import 'package:testt/modal_class/models.dart';
 import 'package:testt/utils/logutil.dart';
 import 'package:testt/utils/res.dart';
@@ -47,7 +48,7 @@ class _TradeListState extends State<TradeList> {
   }
 
   void loadData() async {
-    originList = LanguageHelper.getGithubLanguages().map((v) {
+    originList = LanguageHelper2.getGithubLanguages().map((v) {
       Languages model = Languages.fromJson(v.toJson());
       String tag = model.name.substring(0, 1).toUpperCase();
       if (RegExp("[A-Z]").hasMatch(tag)) {

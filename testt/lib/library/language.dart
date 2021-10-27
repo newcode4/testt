@@ -3,7 +3,7 @@ library github_language_colors;
 import 'dart:collection';
 import 'dart:convert';
 
-class LanguageHelper {
+class LanguageHelper2 {
   static Map<String, String> languageMap = getResource(githubLanguageColors);
 
   static Map<String, String> getResource(List list) {

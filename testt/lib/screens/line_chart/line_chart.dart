@@ -141,7 +141,7 @@ class _LineChartState extends State<LineChart> {
           //Initialize the chart widget
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 490,
+            height: MediaQuery.of(context).size.height*0.65,
             child: SfCartesianChart(
               zoomPanBehavior: _zoomPanBehavior,
                 primaryXAxis: CategoryAxis(),

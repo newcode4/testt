@@ -9,7 +9,7 @@ import 'package:testt/modal_class/GetxController.dart';
 import 'package:testt/modal_class/notes.dart';
 import 'package:testt/screens/Calculate.dart';
 
-import 'cash_page.dart';
+
 
 class DashPage extends StatefulWidget {
   DashPage({Key key, this.title}) : super(key: key);

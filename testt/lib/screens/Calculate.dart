@@ -167,7 +167,7 @@ class _NormalCalcPageState extends State<NormalCalcPage> {
       resizeToAvoidBottomInset: false,
       body: Container(
         padding: EdgeInsets.fromLTRB(10,10,10,0),
-        height: MediaQuery.of(context).size.height * 0.66,
+        height: MediaQuery.of(context).size.height * 0.67,
         color: Colors.black,
         // decoration: BoxDecoration(
         //   gradient: LinearGradient(
@@ -321,7 +321,7 @@ class _NormalCalcPageState extends State<NormalCalcPage> {
 
       ),
       bottomSheet: Container(
-        height: 200,
+        height:  MediaQuery.of(context).size.height * 0.25,
         decoration: BoxDecoration(
           color: Colors.blueGrey,
           shape: BoxShape.rectangle,
