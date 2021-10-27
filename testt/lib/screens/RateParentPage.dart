@@ -593,7 +593,10 @@ class _RateParentPageState extends State<RateParentPage> {
                   target =0;
                   target2 =0;
 
+                  controller.avgpurchase=0;
                   controller.TotalSales(0,0);
+                  controller.totalvolume=0;
+                  controller.totalcal=0;
 
                   controller.AvgPurchase(0, 0,0,0,0,0);
 
